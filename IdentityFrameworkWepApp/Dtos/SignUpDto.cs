@@ -20,6 +20,7 @@ namespace IdentityFrameworkWepApp.Dtos
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "* Bu Alanın Doldurulması Zorunludur")]
+        [EmailAddress(ErrorMessage ="Mail Formatı Yanlıştır.!")]
         [Display(Name = "*Mail :")]
         public string Email { get; set; }
 

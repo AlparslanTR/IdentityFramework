@@ -19,6 +19,8 @@ namespace IdentityFrameworkWepApp.Extenisons
                 opts.Password.RequireUppercase = true; // kullanıcı şifre belirlerken en az bir büyük harf içeren bir şifre belirlemek zorundadır.
                 opts.Password.RequireDigit = true; // kullanıcı şifre belirlerken en az bir rakam içeren bir şifre belirlemek zorundadır.
 
+                opts.Lockout.MaxFailedAccessAttempts = 3; // Kullanıcının giriş yapma hakkını temsil eder.
+                opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3); // Giriş yapma hakkı bitip tekrar deneyen kullanıcı 3 dakika sisteme giremez.
             }).AddPasswordValidator<PasswordValid>().AddUserValidator<UserValid>().AddErrorDescriber<LocalizationIdentityErrorMessagesTurkish>().AddEntityFrameworkStores<AppDbContext>();
         }
     }
