@@ -31,7 +31,7 @@
             <img src="https://alparslanakbas.xyz/BlogTema/img/Alp.png" alt="Logo" class="">
         </div>
 
-        <form asp-controller="Login" asp-action="SignIn" method="post">
+        <form asp-controller="Login" asp-action="SignIn" asp-route-returnUrl="@Context.Request.Query["ReturnUrl"]" method="post">
 
             <div class="title">Giriş</div>
 

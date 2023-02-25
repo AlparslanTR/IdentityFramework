@@ -27,7 +27,28 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>    
+                    </ul>
+                    <ul class="navbar-nav me-0">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                            <a class="nav-link text-dark">@User.Identity.Name</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark btn btn-danger" asp-controller="Member" asp-action="LogOut">Çıkış Yap</a>
+                        </li>  
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-success m-lg-3" asp-controller="Login" asp-action="SignIn">Giriş Yap</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark btn btn-info m-lg-3" asp-controller="Login" asp-action="SignUp">Kayıt Ol</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

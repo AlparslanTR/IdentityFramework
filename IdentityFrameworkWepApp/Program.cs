@@ -13,7 +13,15 @@ builder.Services.AddDbContext<AppDbContext>(opts =>
 });
 
 builder.Services.AddIdentityWithExt();
-
+builder.Services.ConfigureApplicationCookie(opts =>
+{
+    var cookieBuilder= new CookieBuilder();
+    cookieBuilder.Name = "LoginCookie"; // Cookinin adýný oluþturduk 
+    opts.LoginPath = new PathString("/Login/SignIn"); // Tarayýcýnýn kimlik doðrulama yapmasý gerektiði sayfanýn yolu, "Login/SignIn" olarak belirlenir. Kullanýcý doðrulanmadýðý zaman, sistem otomatik olarak yönlendireceði sayfanýn adresidir.
+    opts.Cookie=cookieBuilder;
+    opts.ExpireTimeSpan=TimeSpan.FromDays(60); // Cookinin 60 gün boyunca geçerli olmasýný saðlar.
+    opts.SlidingExpiration = true; // kullanýcýnýn belirli bir süre boyunca iþlem yapmamasý durumunda çerezin süresinin yeniden baþlatýlmasýný saðlar.
+});
 
 var app = builder.Build();
 
@@ -29,7 +37,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
