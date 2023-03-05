@@ -21,7 +21,11 @@ namespace IdentityFrameworkWepApp.Extenisons
 
                 opts.Lockout.MaxFailedAccessAttempts = 3; // Kullanıcının giriş yapma hakkını temsil eder.
                 opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3); // Giriş yapma hakkı bitip tekrar deneyen kullanıcı 3 dakika sisteme giremez.
-            }).AddPasswordValidator<PasswordValid>().AddUserValidator<UserValid>().AddErrorDescriber<LocalizationIdentityErrorMessagesTurkish>().AddEntityFrameworkStores<AppDbContext>();
+            }).AddPasswordValidator<PasswordValid>()
+            .AddUserValidator<UserValid>()
+            .AddErrorDescriber<LocalizationIdentityErrorMessagesTurkish>()
+            .AddDefaultTokenProviders()
+            .AddEntityFrameworkStores<AppDbContext>();
         }
     }
 }

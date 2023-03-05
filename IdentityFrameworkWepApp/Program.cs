@@ -1,6 +1,8 @@
 using IdentityFrameworkWepApp.Data;
 using Microsoft.EntityFrameworkCore;
 using IdentityFrameworkWepApp.Extenisons;
+using Microsoft.AspNetCore.Identity;
+using IdentityFrameworkWepApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,18 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(opts =>
 {
     opts.UseSqlServer(builder.Configuration.GetConnectionString("MsSql"));
+});
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan=TimeSpan.FromHours(1);
+});
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+{
+    options.ValidationInterval = TimeSpan.FromMinutes(15); // kullanýcýnýn kimlik doðrulama iþlemi sýrasýnda kullanýlan güvenlik damgasýnýn geçerlilik süresini belirler.
 });
 
 builder.Services.AddIdentityWithExt();
