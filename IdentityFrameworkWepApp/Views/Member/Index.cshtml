@@ -3,6 +3,37 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@model UserDto
+
 
 <h1>Hoşgeldiniz @User.Identity.Name</h1>
 
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+      <user-picture class="rounded" style="width:200px; height:200px;" picture-url="@Model.PictureUrl"></user-picture>
+    </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Kullanıcı Adınız</th>
+      <th scope="col">Mail Adresiniz</th>
+      <th scope="col">Telefon No</th>
+      <th scope="col">Online</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>@Model.UserName</td>
+      <td>@Model.Email</td>
+      <td>@Model.PhoneNumber</td>
+      <td>@User.Identity.IsAuthenticated</td>
+    </tr>
+  </tbody>
+</table>
+
+<a class="btn btn-info m-lg-3" asp-controller="Member" asp-action="PasswordChange">Şifrenizi Güncelleyin</a>
+<a class="btn btn-success m-lg-3" asp-controller="Member" asp-action="UserEdit">Profil Bilgileriniz</a>

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using IdentityFrameworkWepApp.Extenisons;
 using Microsoft.AspNetCore.Identity;
 using IdentityFrameworkWepApp.Services;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,8 @@ builder.Services.ConfigureApplicationCookie(opts =>
     opts.ExpireTimeSpan=TimeSpan.FromDays(60); // Cookinin 60 gün boyunca geçerli olmasýný saðlar.
     opts.SlidingExpiration = true; // kullanýcýnýn belirli bir süre boyunca iþlem yapmamasý durumunda çerezin süresinin yeniden baþlatýlmasýný saðlar.
 });
+
+builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory())); // bu kod, bir dosya saðlayýcýsýnýn IServiceCollection içinde kaydedilmesini saðlar ve bu saðlayýcý, çalýþan iþlem için geçerli çalýþma dizinindeki dosya bilgilerini saðlamak için kullanýlabilir hale getirir.
 
 var app = builder.Build();
 

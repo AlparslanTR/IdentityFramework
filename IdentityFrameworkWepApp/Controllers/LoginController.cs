@@ -54,6 +54,11 @@ namespace IdentityFrameworkWepApp.Controllers
         [HttpPost]
         public async Task <IActionResult> SignIn(SignInDto request, string returnUrl=null)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             returnUrl = returnUrl ?? Url.Action("Index", "Home"); //  Eğer değişkenin değeri null ise, kod sağ tarafındaki Url.Action("Index", "Home") metodunu çalıştırarak "returnUrl" değişkenine varsayılan bir değer atar.
 
             var isUser=await _userManager.FindByEmailAsync(request.Email);
