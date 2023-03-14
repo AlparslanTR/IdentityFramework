@@ -162,5 +162,10 @@ namespace IdentityFrameworkWepApp.Controllers
             };
             return RedirectToAction("UserEdit", "Member");   
         }
+        
+        public async Task<IActionResult> AccessDenied(string ReturnUrl)
+        {
+            return View();
+        }
     }
 }

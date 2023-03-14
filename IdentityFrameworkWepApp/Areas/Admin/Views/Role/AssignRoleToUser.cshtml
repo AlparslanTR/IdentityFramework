@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "AssignRoleToUser";
+    Layout = "~/Areas/Shared/_Layout.cshtml";
+}
+@model List<AssignRoleToUserDtoArea>
+
+<div asp-validation-summary=ModelOnly class="alert alert-danger" role="alert">
+</div>
+<form class="row g-3" asp-area="Admin" asp-controller="Role" asp-action="AssignRoleToUser" asp-route-userId="@ViewBag.userId" method="post" enctype="multipart/form-data">
+    <div class="col-md-12">
+
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" asp-for="@Model[i].Exist">
+                <label class="form-check-label" for="flexCheckDefault">@Model[i].Name</label>
+                <input type="hidden" asp-for="@Model[i].Name">
+                <input type="hidden" asp-for="@Model[i].Id">
+            </div>
+        }
+
+    </div>
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-primary">Rol Ata</button>
+    </div>
+</form>
+
+
+

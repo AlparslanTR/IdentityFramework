@@ -33,6 +33,7 @@ builder.Services.ConfigureApplicationCookie(opts =>
     var cookieBuilder= new CookieBuilder();
     cookieBuilder.Name = "LoginCookie"; // Cookinin adýný oluþturduk 
     opts.LoginPath = new PathString("/Login/SignIn"); // Tarayýcýnýn kimlik doðrulama yapmasý gerektiði sayfanýn yolu, "Login/SignIn" olarak belirlenir. Kullanýcý doðrulanmadýðý zaman, sistem otomatik olarak yönlendireceði sayfanýn adresidir.
+    opts.AccessDeniedPath = new PathString("/Member/AccessDenied"); // Yetkisiz sayfaya giriþ yaptýðýnda bu sayfaya yönlendir.
     opts.Cookie=cookieBuilder;
     opts.ExpireTimeSpan=TimeSpan.FromDays(60); // Cookinin 60 gün boyunca geçerli olmasýný saðlar.
     opts.SlidingExpiration = true; // kullanýcýnýn belirli bir süre boyunca iþlem yapmamasý durumunda çerezin süresinin yeniden baþlatýlmasýný saðlar.

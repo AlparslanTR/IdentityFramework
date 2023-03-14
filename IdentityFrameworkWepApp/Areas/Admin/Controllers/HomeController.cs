@@ -20,16 +20,24 @@ namespace IdentityFrameworkWepApp.Areas.Admin.Controllers
         {
             return View();
         }
-        public async Task <IActionResult> UserList()
+        public async Task<IActionResult> UserList()
         {
-            var list= await _userManager.Users.ToListAsync();
-            var userlist = list.Select(x => new UserArea()
+            var users = await _userManager.Users.ToListAsync();
+            var userAreas = new List<UserArea>();
+
+            foreach (var user in users)
             {
-                Id = x.Id,
-                UserName = x.UserName,
-                Email = x.Email,
-            }).ToList();
-            return View(userlist);
+                var roles = await _userManager.GetRolesAsync(user);
+                var userArea = new UserArea
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    Role = roles.FirstOrDefault()
+                };
+                userAreas.Add(userArea);
+            }
+            return View(userAreas);
         }
     }
 }
