@@ -26,8 +26,17 @@
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="UserList">Admin Sayfası</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>    
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Member" asp-action="ClaimsList">Claim Özelliklerim</a>
+                        </li>   
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Member" asp-action="Kütahya">Kütahyalılar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Member" asp-action="Borsa">Döviz Kurları</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Member" asp-action="Violence">Savaş Videoları</a>
+                        </li>
                     </ul>
                     <ul class="navbar-nav me-0">
                         @if (User.Identity.IsAuthenticated)

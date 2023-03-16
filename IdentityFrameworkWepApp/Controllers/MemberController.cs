@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
+using System.Security.Claims;
 
 namespace IdentityFrameworkWepApp.Controllers
 {
@@ -98,9 +99,9 @@ namespace IdentityFrameworkWepApp.Controllers
             {
                 UserName = currentUser.UserName,
                 Age = currentUser.Age,
-                BirthDate = currentUser.BirthDate,
+                BirthDate = (DateTime)currentUser.BirthDate,
                 City = currentUser.City,
-                Gender = currentUser.Gender,
+                Gender = (byte)currentUser.Gender,
                 Mail = currentUser.Email,
                 Phone = currentUser.PhoneNumber,
             };
@@ -146,7 +147,15 @@ namespace IdentityFrameworkWepApp.Controllers
 
             await _userManager.UpdateSecurityStampAsync(currentUser);
             await _signInManager.SignOutAsync();
-            await _signInManager.SignInAsync(currentUser, true);
+            if (request.BirthDate.HasValue)
+            {
+                await _signInManager.SignInWithClaimsAsync(currentUser, true, new[] { new Claim("birthDate", currentUser.BirthDate.Value.ToString()) });
+            }
+            else
+            {
+                await _signInManager.SignInAsync(currentUser, true);
+            }
+            
 
             TempData["SuccessMessage"] = "Bilgileriniz Güncellendi";
 
@@ -154,16 +163,40 @@ namespace IdentityFrameworkWepApp.Controllers
             {
                 UserName = currentUser.UserName,
                 Age = currentUser.Age,
-                BirthDate = currentUser.BirthDate,
+                BirthDate = (DateTime)currentUser.BirthDate,
                 City = currentUser.City,
-                Gender = currentUser.Gender,
+                Gender = (byte)currentUser.Gender,
                 Mail = currentUser.Email,
                 Phone = currentUser.PhoneNumber,
             };
             return RedirectToAction("UserEdit", "Member");   
         }
         
-        public async Task<IActionResult> AccessDenied(string ReturnUrl)
+        public IActionResult AccessDenied(string ReturnUrl)
+        {
+            return View();
+        }
+        
+        public IActionResult ClaimsList()
+        {
+            var userClaims=User.Claims.Select(x=>new ClaimsList() { Issuer=x.Issuer,Type=x.Type,Value=x.Value}).ToList();
+            return View(userClaims);
+        }
+
+        [Authorize(Policy ="KütahyaPolicy")]
+        public IActionResult Kütahya()
+        {
+            return View();
+        }
+
+        [Authorize(Policy = "ExchangePolicy")]
+        public IActionResult Borsa()
+        {
+            return View();
+        }
+
+        [Authorize(Policy ="ViolencePolicy")]
+        public IActionResult Violence()
         {
             return View();
         }

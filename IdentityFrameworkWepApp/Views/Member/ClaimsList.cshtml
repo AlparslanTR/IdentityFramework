@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "ClaimsList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<ClaimsList>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Issuer</th>
+            <th scope="col">Type</th>
+            <th scope="col">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@item.Issuer</th>
+                <td>@item.Type</td>
+                <td>@item.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -4,6 +4,10 @@ using IdentityFrameworkWepApp.Extenisons;
 using Microsoft.AspNetCore.Identity;
 using IdentityFrameworkWepApp.Services;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Authentication;
+using IdentityFrameworkWepApp.ClaimsProvider;
+using IdentityFrameworkWepApp.Requirements;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +44,26 @@ builder.Services.ConfigureApplicationCookie(opts =>
 });
 
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory())); // bu kod, bir dosya saðlayýcýsýnýn IServiceCollection içinde kaydedilmesini saðlar ve bu saðlayýcý, çalýþan iþlem için geçerli çalýþma dizinindeki dosya bilgilerini saðlamak için kullanýlabilir hale getirir.
+
+builder.Services.AddScoped<IClaimsTransformation,ClaimsProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpirationRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler,ViolenceRequirementHandler>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("KütahyaPolicy", options =>
+    {
+        options.RequireClaim("City", "Kütahya");
+    });
+    options.AddPolicy("ExchangePolicy", options =>
+    {
+        options.AddRequirements(new ExchangeExpireRequirement());
+    });
+    options.AddPolicy("ViolencePolicy", options =>
+    {
+        options.AddRequirements(new ViolenceRequirement() { staticAge=18});
+    });
+});
 
 var app = builder.Build();
 

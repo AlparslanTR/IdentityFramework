@@ -27,7 +27,7 @@ namespace IdentityFrameworkWepApp.Dtos
         //
         [Display(Name = "Doğum Tarihi :")]
         [DataType(DataType.Date)]
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
         //
         [Display(Name = "Cinsiyet :")]
         public byte Gender { get; set; }

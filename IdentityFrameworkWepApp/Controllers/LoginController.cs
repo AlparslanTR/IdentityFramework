@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using IdentityFrameworkWepApp.Extenisons;
 using IdentityFrameworkWepApp.Services;
+using System.Security.Claims;
 
 namespace IdentityFrameworkWepApp.Controllers
 {
@@ -37,6 +38,10 @@ namespace IdentityFrameworkWepApp.Controllers
 
             if (identityResult.Succeeded)
             {
+                var exChangeClaim = new Claim("ExchangeExpireDate", DateTime.Now.AddDays(10).ToString()); // String olan claime kayıt olduğu tarihden itibaren 10 gün yetki veriyor.
+                var userClaim= await _userManager.FindByNameAsync(request.UserName); // Kayıt olan kullanıcıyı değişkene ata.
+                await _userManager.AddClaimAsync(userClaim,exChangeClaim); // Kayıt olan kullanıcıya bu claimi oto ekle.
+               
                 TempData["SuccessMessage"] = "Kayıt Başarılı. Otomatik Yönlendirme Aktif";
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 await _emailService.SendMailWelcomeMessage(user.Email);
@@ -67,11 +72,22 @@ namespace IdentityFrameworkWepApp.Controllers
                 ModelState.AddModelError(string.Empty, "Mail Adresiniz veya Şifreniz Yanlış.!");
                 return View();
             }
-
+            
             var result =await _signInManager.PasswordSignInAsync(isUser, request.Password, request.RememberMe,true);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelErrorList(new List<string>() { $"Mail Adresiniz veya Şifreniz Yanlış(Başarısız Giriş Sayısı : {await _userManager.GetAccessFailedCountAsync(isUser)} , 3 Hakkınız Bulunmaktadır. )" });
+                return View();
+            }
 
             if (result.Succeeded)
             {
+                if (isUser.BirthDate.HasValue)
+                {
+                    await _signInManager.SignInWithClaimsAsync(isUser, request.RememberMe, new[] { new Claim("birthDate", isUser.BirthDate.Value.ToString()) });
+                    
+                }
                 return Redirect(returnUrl);
             }
 
