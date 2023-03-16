@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication;
 using IdentityFrameworkWepApp.ClaimsProvider;
 using IdentityFrameworkWepApp.Requirements;
 using Microsoft.AspNetCore.Authorization;
+using IdentityFrameworkWepApp.Seeds;
+using IdentityFrameworkWepApp.Permissions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,9 +65,19 @@ builder.Services.AddAuthorization(options =>
     {
         options.AddRequirements(new ViolenceRequirement() { staticAge=18});
     });
+    options.AddPolicy("OrderPermission", options =>
+    {
+        options.RequireClaim("Permission", Permission.Order.Delete);
+    });
 });
 
 var app = builder.Build();
+
+using(var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    await PermissionSeed.Seed(roleManager);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
